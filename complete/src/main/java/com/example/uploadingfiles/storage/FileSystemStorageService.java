@@ -26,6 +26,11 @@ public class FileSystemStorageService implements StorageService {
 	@Autowired
 	public FileSystemStorageService(StorageProperties properties) {
 		this.rootLocation = Paths.get(properties.getLocation());
+		try {
+			Files.createDirectories(rootLocation);
+		} catch (IOException exception) {
+			exception.printStackTrace();
+		}
 	}
 
 	@Override
@@ -104,13 +109,5 @@ public class FileSystemStorageService implements StorageService {
 		System.out.println(text);
 		return text;
 	}
-	@Override
-	public void init() {
-		try {
-			Files.createDirectories(rootLocation);
-		}
-		catch (IOException e) {
-			throw new StorageException("Could not initialize storage", e);
-		}
-	}
+
 }

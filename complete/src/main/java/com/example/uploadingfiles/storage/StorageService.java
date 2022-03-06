@@ -21,6 +21,4 @@ public interface StorageService {
 
 	String readFile(String filename) throws IOException;
 
-	void init();
-
 }

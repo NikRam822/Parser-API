@@ -10,3 +10,4 @@ public class StorageException extends RuntimeException {
 		super(message, cause);
 	}
 }
+//todo: 1) Логер
