@@ -1,12 +1,14 @@
 package com.parser_app.uploadingfiles.controllers;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,16 +32,6 @@ public class FileUploadController {
         this.storageService = storageService;
     }
 
-    @GetMapping("/")
-    public String listUploadedFiles(Model model) throws IOException {
-
-        model.addAttribute("files", storageService.getAllPaths().map(
-                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-                        "serveFile", path.getFileName().toString()).build().toUri().toString())
-                .collect(Collectors.toList()));
-
-        return "uploadForm";
-    }
 
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
@@ -51,15 +43,15 @@ public class FileUploadController {
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
-    @PostMapping("/")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes) throws IOException {
+    @PostMapping("/upload")
+    public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
 
         storageService.store(file.getInputStream(), file.getOriginalFilename());
-        redirectAttributes.addFlashAttribute("message",
-                "You successfully uploaded " + file.getOriginalFilename() + "!");
+        if (!file.getOriginalFilename().endsWith(".txt")) {
+            return new ResponseEntity<>("Not txt", HttpStatus.BAD_REQUEST);
+        }
 
-        return "redirect:/";
+        return new ResponseEntity<>("Successful", HttpStatus.OK);
     }
 
 
