@@ -10,6 +10,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.stream.Stream;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -19,7 +21,7 @@ import org.springframework.stereotype.Service;
 public class FileSystemStorageService implements StorageService {
 
     private final Path storagePath;
-
+private Gson gson = new GsonBuilder().setPrettyPrinting().create();
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
         this.storagePath = Paths.get(properties.getLocation());
@@ -81,8 +83,29 @@ public class FileSystemStorageService implements StorageService {
 
         List<String> text = Files.readAllLines(filePath);
 
-        System.out.println(text);
+        System.out.println(text.size());
+
+        generateJson(text);
         return text;
     }
 
+    private String generateJson( List<String> text){
+        String str="";
+        Gson gson=new GsonBuilder().setPrettyPrinting().create();
+        for (int i=0;i<text.size();i++) {
+            if (count(text.get(i),'#')>0) {
+                if(!text.get(i+1).isEmpty() && count(text.get(i+1),'#')>count(text.get(i),'#')){
+
+                }
+        FileStruct fileStruct = new FileStruct(text.get(i),"Hello",null);
+        str = str + gson.toJson(fileStruct);
+        System.out.println(str);
+            }
+        }
+
+        return str ;
+    }
+    private int count(String s, char c){
+        return (int) s.chars().filter(x->x==c).count();
+    }
 }
