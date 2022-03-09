@@ -1,13 +1,19 @@
 package com.parser_app.uploadingfiles.storage;
 
-import com.google.gson.Gson;
-
-import java.util.List;
 
 public class FileStruct {
     private String name;
     private String content;
-   private String childElements;
+
+    public int getDeep() {
+        return deep;
+    }
+
+    public void setDeep(int deep) {
+        this.deep = deep;
+    }
+
+    private int deep;
 
     public String getName() {
         return name;
@@ -29,17 +35,10 @@ public class FileStruct {
         this.content = content;
     }
 
-    public String getChildElements() {
-        return childElements;
-    }
 
-    public void setChildElements(String childElements) {
-        this.childElements = childElements;
-    }
-
-    public FileStruct(String name, String content, String childElements) {
+    public FileStruct(String name, String content,int deep) {
         this.name = name;
         this.content = content;
-        this.childElements = childElements;
+        this.deep=deep;
     }
 }

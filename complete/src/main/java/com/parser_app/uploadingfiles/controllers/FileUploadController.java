@@ -38,7 +38,8 @@ public class FileUploadController {
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) throws IOException {
 
         Resource file = storageService.getURLByFileName(filename);
-        List<String> content = storageService.readFile(storageService.getPathByFileName(filename));
+        String content = storageService.readFile(storageService.getPathByFileName(filename));
+       // System.out.println(content);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }

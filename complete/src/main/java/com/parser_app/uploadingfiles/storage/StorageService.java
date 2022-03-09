@@ -21,7 +21,7 @@ public interface StorageService {
 
 	Resource getURLByFileName(String filename);
 
-	List<String> readFile(Path filePath) throws IOException;
+	String readFile(Path filePath) throws IOException;
 
 
 }

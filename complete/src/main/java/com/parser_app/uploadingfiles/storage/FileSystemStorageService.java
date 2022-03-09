@@ -21,7 +21,8 @@ import org.springframework.stereotype.Service;
 public class FileSystemStorageService implements StorageService {
 
     private final Path storagePath;
-private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
         this.storagePath = Paths.get(properties.getLocation());
@@ -79,33 +80,48 @@ private Gson gson = new GsonBuilder().setPrettyPrinting().create();
     }
 
     @Override
-    public List<String> readFile(Path filePath) throws IOException {
+    public String readFile(Path filePath) throws IOException {
 
         List<String> text = Files.readAllLines(filePath);
 
-        System.out.println(text.size());
+        // System.out.println(text.size());
 
-        generateJson(text);
-        return text;
+
+        return generateJson(text);
     }
 
-    private String generateJson( List<String> text){
-        String str="";
-        Gson gson=new GsonBuilder().setPrettyPrinting().create();
-        for (int i=0;i<text.size();i++) {
-            if (count(text.get(i),'#')>0) {
-                if(!text.get(i+1).isEmpty() && count(text.get(i+1),'#')>count(text.get(i),'#')){
+    private String generateJson(List<String> text) {
+        StringBuilder str = new StringBuilder();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        for (int i = 0; i < text.size(); i++) {
+            int deep = count(text.get(i), '#');
+            if (deep > 0) {
+                FileStruct fileStruct = new FileStruct(text.get(i).replaceAll("#", ""), readContent(text, i), deep);
 
-                }
-        FileStruct fileStruct = new FileStruct(text.get(i),"Hello",null);
-        str = str + gson.toJson(fileStruct);
-        System.out.println(str);
+                str.append(gson.toJson(fileStruct));
             }
         }
 
-        return str ;
+        return str.toString();
     }
-    private int count(String s, char c){
-        return (int) s.chars().filter(x->x==c).count();
+
+    private String readContent(List<String> text, int numberOfString) {
+        StringBuilder content = new StringBuilder();
+        for (int i = numberOfString + 1; i < text.size(); i++) {
+            int deep = count(text.get(i), '#');
+
+            if (deep == 0) {
+                content.append(text.get(i));
+            } else {
+                return content.toString();
+            }
+
+        }
+
+        return content.toString();
+    }
+
+    private int count(String s, char c) {
+        return (int) s.chars().filter(x -> x == c).count();
     }
 }
