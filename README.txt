@@ -3,6 +3,7 @@ Test Assignment for Ap Soft company.
 The project is a Java Rest-API written using Spring.
 
 In order to use the API, you will need an HTTP client to send requests (e.g. Postman), you can also use a graphical interface.
+You will need to clone the repository in order to start the project.  Then, if you are using idea, follow the instructions: File->New->Module from Existing Sources, and select the folder "complete", which is in the current project folder.
 
 To use the API you'll need to install:
 Git
