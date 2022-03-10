@@ -23,10 +23,3 @@ build/
 *.iws
 *.idea
 
-# Test files
-
-*-uploaded
-dependency-reduced-pom.xml
-README.html
- 
-upload-dir
