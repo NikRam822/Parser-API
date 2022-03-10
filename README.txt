@@ -22,11 +22,12 @@ GET: http://localhost:8080/files/[examle.txt] - request for file processing. The
 
 Example queries:
 
+Parser-Application\Example_requests - file with example.
+
 1) GET: http://localhost:8080/
 
 2) POST: http://localhost:8080/ (BODY: KEY = file, VALUE = test.txt)
 
 3) GET: http://localhost:8080/files/test.txt
 
-
-Translated with www.DeepL.com/Translator (free version)
+Parser-Application\test.txt - file for tests.
