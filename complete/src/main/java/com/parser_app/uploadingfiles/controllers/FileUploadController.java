@@ -40,7 +40,7 @@ public class FileUploadController {
     @PostMapping("/")
     public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws IOException {
         storageService.store(file.getInputStream(), file.getOriginalFilename());
-        redirectAttributes.addFlashAttribute("message", "is not txt!" + file.getOriginalFilename());
+        redirectAttributes.addFlashAttribute("message", "successful! " + file.getOriginalFilename());
         return "redirect:/";
     }
 
