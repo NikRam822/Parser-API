@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import com.parser_app.uploadingfiles.storage.StorageService;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class FileUploadController {
@@ -32,18 +33,15 @@ public class FileUploadController {
     @ResponseBody
     public ResponseEntity<String> serveFile(@PathVariable String filename) throws IOException {
         String content = storageService.readFile(storageService.getPathByFileName(filename));
-        return  ResponseEntity.ok().body(content);
+        System.out.println(content);
+        return ResponseEntity.ok().body(content);
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
-
+    @PostMapping("/")
+    public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws IOException {
         storageService.store(file.getInputStream(), file.getOriginalFilename());
-        if (!file.getOriginalFilename().endsWith(".txt")) {
-            return new ResponseEntity<>("Not txt", HttpStatus.BAD_REQUEST);
-        }
-
-        return new ResponseEntity<>("Successful", HttpStatus.OK);
+        redirectAttributes.addFlashAttribute("message", "is not txt!" + file.getOriginalFilename());
+        return "redirect:/";
     }
 
 
